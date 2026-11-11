@@ -19,7 +19,7 @@ from pages.login_page import LoginPage
 
 
 # ---------------------------------------------------------------- B1.1 (together with the teacher)
-@pytest.mark.smoke
+
 @pytest.mark.ui
 def test_b1_1_search_keyword_shows_only_matching_products(page):
     """Goal: search filters the grid.
