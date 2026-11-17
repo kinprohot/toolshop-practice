@@ -55,7 +55,6 @@ class HomePage(BasePage):
 
         self.product_card(name).first.click()
         return ProductPage(self.page)
-
     def filter_by_category(self, name: str):
         self.page.get_by_label(name).check()
         return self
