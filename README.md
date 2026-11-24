@@ -1,5 +1,15 @@
 # Toolshop Practice - bài thực hành 4 buổi (Automation Testing)
 
+![CI](https://github.com/kinprohot/toolshop-practice/actions/workflows/ci.yml/badge.svg)
+
+## Kết quả CI
+
+![CI xanh](docs/screenshots/ci-green.png)
+
+## Trace Viewer
+
+![Trace Viewer](docs/screenshots/trace-viewer.png)
+
 Repo này là "phòng lab" trên lớp. Mỗi buổi có một thư mục bài tập trong `tests/`. Bài nào chưa làm sẽ đỏ (`NotImplementedError`), làm xong thì xanh. Mục tiêu mỗi buổi: biến đỏ thành xanh, đúng luật.
 
 Hệ thống kiểm thử: Toolshop https://practicesoftwaretesting.com (PROD) và https://with-bugs.practicesoftwaretesting.com (BUGGY).
