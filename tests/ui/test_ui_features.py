@@ -108,10 +108,13 @@ def test_account_page_logged_in_shows_user_menu(logged_in_page):
 
 @pytest.mark.ui
 def test_contact_without_subject_shows_error(page):
+    """Goal: verify contact form requires a subject before submission.
+    Precondition: none.
+    Expected: subject error displays 'Subject is required'."""
     contact = ContactPage(page).open()
     contact.first_name.fill("Linh")
     contact.last_name.fill("Nguyen")
     contact.email.fill("linh@example.com")
     contact.message.fill("Hello, I need help with my order number 12345678901234567890.")
     contact.submit()
-    expect(contact.subject_error).to_be_visible()
+    expect(contact.subject_error).to_have_text("Subject is required")
