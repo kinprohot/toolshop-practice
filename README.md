@@ -10,6 +10,42 @@
 
 ![Trace Viewer](docs/screenshots/trace-viewer.png)
 
+## Phân công công việc
+
+| Thành viên | Tài khoản GitHub | Nhiệm vụ chính |
+|---|---|---|
+| Nguyễn Văn Lực | `kinprohot` | Khung kiểm thử POM, Smoke tests, API tests, Network route, BDD, CI/CD (`ci.yml`), Săn lỗi BUGGY & `BUG_REPORT.md` |
+| Tín | `kaneyoki` | Review Pull Request, phối hợp kiểm thử smoke & giao diện |
+
+## Bảng Test Case tổng hợp
+
+| ID | Nhóm / Chức năng | Mô tả | Các bước chính | Dữ liệu | Kết quả mong đợi |
+|---|---|---|---|---|---|
+| TC-UI-01 | Tìm kiếm (`smoke`) | Tìm kiếm theo từ khóa | Mở trang chủ -> nhập `pliers` -> Search | `"pliers"` | Caption chứa `pliers`, mọi tên sản phẩm chứa `pliers` |
+| TC-UI-02 | Chi tiết & Giỏ (`smoke`) | Thêm số lượng 3 vào giỏ | Mở `Claw Hammer` -> chọn qty `3` -> Add to cart | `"Claw Hammer"`, `3` | Toast xác nhận, badge giỏ hiện `3` |
+| TC-UI-03 | Xác thực (`smoke`) | Đăng nhập sai mật khẩu | Mở Login -> nhập email không tồn tại -> Login | `nobody-exists-sprint1@example.com` | Hiện `Invalid email or password`, giữ nguyên `/auth/login` |
+| TC-UI-04 | Liên hệ (`smoke`) | Gửi form liên hệ trống | Mở Contact -> không điền -> Send | Trống | Hiện `Subject is required` và `Message is required` |
+| TC-UI-05 | Tìm kiếm | Tìm từ khóa không tồn tại | Mở trang chủ -> tìm `zzz-no-such-tool` | `"zzz-no-such-tool"` | Hiện `There are no products found.`, 0 sản phẩm |
+| TC-UI-06 | Sắp xếp | Sắp xếp theo giá tăng/giảm | Mở trang chủ -> chọn `price,asc` / `price,desc` | `price,asc`, `price,desc` | Danh sách giá trên trang được sắp xếp đúng chiều |
+| TC-UI-07 | Bộ lọc | Lọc theo danh mục Hammer | Mở trang chủ -> tích checkbox `Hammer` | `"Hammer"` | Mọi sản phẩm hiển thị có chữ `hammer` |
+| TC-UI-08 | Giỏ hàng | Tính thành tiền & tổng giỏ | Thêm `Combination Pliers` qty 2 -> vào Cart | `"Combination Pliers"`, `2` | Line total = đơn giá x 2, tổng = tổng các dòng |
+| TC-UI-09 | Tài khoản | Tái sử dụng phiên đăng nhập | Mở `/account` bằng `logged_in_page` (`storage_state`) | `auth_state` | Tiêu đề `My account`, menu hiện tên `QA Bot` |
+| TC-UI-10 | Liên hệ (AI) | Gửi form liên hệ thiếu Subject | Điền tên, email, message -> bỏ trống Subject -> Send | Thiếu Subject | Hiện chính xác `Subject is required` |
+| TC-BDD-01 | Giỏ hàng (BDD) | Scenario Outline tính tiền giỏ | Mở sản phẩm -> thêm số lượng -> vào giỏ | `Combination Pliers (1)`, `Claw Hammer (3)` | Line total = unit price x quantity |
+| TC-NET-01 | Route / Mock | Chặn ảnh & giả lập API rỗng | `page.route()` abort ảnh / fulfill `EMPTY_PAGE` | `EMPTY_PAGE` | Trang vẫn chạy khi chặn ảnh; hiện thông báo rỗng khi API rỗng |
+| TC-API-01 | API Sản phẩm | Hợp đồng JSON, tìm kiếm JSON, 4xx | `GET /products`, `GET /products/search`, `401/404` | `data/search_keywords.json` | Đúng schema phân trang, mọi tên khớp từ khóa, đúng mã 4xx |
+| TC-API-02 | API User & Cart | Validate 422, Bearer token, Giỏ | `POST /users/register`, `GET /users/me`, `POST/GET /carts` | `test_user`, `auth_headers` | 422 khi rỗng, 200 với token, giỏ lưu đúng số lượng |
+
+## Sử dụng AI
+
+| Test | Công cụ | AI viết gì | Sai ở đâu | Em sửa thành | Commit |
+|---|---|---|---|---|---|
+| `test_contact_without_subject_shows_error` | Gemini / AI Assistant | Sinh test điền form liên hệ thiếu Subject và gọi `submit()` | Thiếu docstring 3 dòng theo luật lớp; assertion lỏng chỉ kiểm `expect(contact.subject_error).to_be_visible()` mà không kiểm nội dung lỗi | Thêm docstring 3 dòng (Goal, Precondition, Expected) và siết thành `expect(contact.subject_error).to_have_text("Subject is required")` | Draft: `ccaaa1b` → Sửa: `a60411e` |
+
+## Báo cáo lỗi trên BUGGY
+
+Xem chi tiết 7 lỗi thật đã phát hiện và xác minh trên môi trường BUGGY kèm ảnh bằng chứng tại: [docs/BUG_REPORT.md](docs/BUG_REPORT.md)
+
 Repo này là "phòng lab" trên lớp. Mỗi buổi có một thư mục bài tập trong `tests/`. Bài nào chưa làm sẽ đỏ (`NotImplementedError`), làm xong thì xanh. Mục tiêu mỗi buổi: biến đỏ thành xanh, đúng luật.
 
 Hệ thống kiểm thử: Toolshop https://practicesoftwaretesting.com (PROD) và https://with-bugs.practicesoftwaretesting.com (BUGGY).
