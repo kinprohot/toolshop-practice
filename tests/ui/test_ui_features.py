@@ -2,6 +2,7 @@ import pytest
 from playwright.sync_api import expect
 
 from pages.account_page import AccountPage
+from pages.contact_page import ContactPage
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 
@@ -103,3 +104,14 @@ def test_account_page_logged_in_shows_user_menu(logged_in_page):
     account = AccountPage(logged_in_page).open()
     expect(account.title).to_have_text("My account")
     expect(account.nav_menu).to_contain_text("QA Bot")
+
+
+@pytest.mark.ui
+def test_contact_without_subject_shows_error(page):
+    contact = ContactPage(page).open()
+    contact.first_name.fill("Linh")
+    contact.last_name.fill("Nguyen")
+    contact.email.fill("linh@example.com")
+    contact.message.fill("Hello, I need help with my order number 12345678901234567890.")
+    contact.submit()
+    expect(contact.subject_error).to_be_visible()
